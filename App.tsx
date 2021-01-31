@@ -3,7 +3,7 @@ import AppLoading from 'expo-app-loading'
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { useFonts, Inter_500Medium, Inter_400Regular } from '@expo-google-fonts/inter';
+import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_400Regular } from '@expo-google-fonts/inter';
 
 import useCachedResources from './hooks/useCachedResources';
 import { AppNavigator } from './modules/AppNavigator';
@@ -13,6 +13,7 @@ export default function App() {
   let [fontsLoaded] = useFonts({
     Inter_500Medium,
     Inter_400Regular,
+    Inter_600SemiBold,
   });
 
   if (!isLoadingComplete || !fontsLoaded) {
@@ -23,7 +24,7 @@ export default function App() {
         <NavigationContainer>
           <AppNavigator />
         </NavigationContainer>
-        <StatusBar />
+        <StatusBar backgroundColor="#fff" />
       </SafeAreaProvider>
     );
   }

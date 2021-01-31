@@ -1,28 +1,108 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  KeyboardAvoidingView
+} from 'react-native';
+import Constants from 'expo-constants';
+import LogoSvg from '../../../assets/svgs/LogoSvg';
 
-export default function SignUpScreen() {
-    return (
+export default function SignInScreen() {
+
+  const isIos = Platform.OS === "ios";
+
+  return (
+    <View style={styles.mainContainer}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-            <Text style={styles.title}>Tab One</Text>
-            <View style={styles.separator} />
+          <KeyboardAvoidingView
+            style={{ width: '100%' }}
+            contentContainerStyle={{ alignItems: 'center' }}
+            behavior="position">
+            <View style={styles.logoContainer}>
+              <LogoSvg />
+            </View>
+            <Text style={styles.title}>Create Account</Text>
+            <TextInput
+              value={''}
+              placeholder="Name"
+              onChangeText={(text) => console.log(text)}
+              style={styles.textInput}
+            />
+            <TextInput
+              value={''}
+              placeholder="Email"
+              onChangeText={(text) => console.log(text)}
+              style={styles.textInput}
+            />
+            <TextInput
+              value={''}
+              placeholder="Password"
+              onChangeText={(text) => console.log(text)}
+              style={styles.textInput}
+            />
+            <Pressable
+              android_ripple={{ color: 'gray', borderless: false }}
+              style={({ pressed }) => [styles.actionButton, { backgroundColor: (pressed && isIos) ? 'gray' : '#000618' }]}>
+              <Text style={styles.actionButtonText}>Sign Up!</Text>
+            </Pressable>
+          </KeyboardAvoidingView>
+          <TouchableOpacity>
+            <Text style={[styles.actionButtonText, { color: '#000', marginVertical: '20%' }]}>Sign In</Text>
+          </TouchableOpacity>
         </View>
-    );
+      </ScrollView>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
-    },
+  mainContainer: {
+    flex: 1,
+    marginTop: Constants.statusBarHeight,
+    backgroundColor: '#fff',
+  },
+  container: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+  },
+  logoContainer: {
+    marginBottom: '7%',
+    marginTop: '25%',
+  },
+  title: {
+    fontSize: 32,
+    fontFamily: 'Inter_600SemiBold',
+    lineHeight: 38,
+    marginBottom: '7%',
+  },
+  actionButton: {
+    width: '100%',
+    padding: 18,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+  actionButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontFamily: 'Inter_400Regular'
+  },
+  textInput: {
+    padding: 18,
+    borderRadius: 8,
+    backgroundColor: '#F8F8F8',
+    width: '100%',
+    fontSize: 18,
+    fontFamily: 'Inter_400Regular',
+    marginVertical: 5,
+  }
 });
