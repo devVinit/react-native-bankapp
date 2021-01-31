@@ -1,23 +1,31 @@
 import { StatusBar } from 'expo-status-bar';
+import AppLoading from 'expo-app-loading'
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { useFonts, Inter_500Medium, Inter_400Regular } from '@expo-google-fonts/inter';
 
 import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
-import Navigation from './navigation';
+import { AppNavigator } from './modules/AppNavigator';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
-  const colorScheme = useColorScheme();
+  let [fontsLoaded] = useFonts({
+    Inter_500Medium,
+    Inter_400Regular,
+  });
 
-  if (!isLoadingComplete) {
-    return null;
+  if (!isLoadingComplete || !fontsLoaded) {
+    return <AppLoading />;
   } else {
     return (
       <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
         <StatusBar />
       </SafeAreaProvider>
     );
   }
 }
+
