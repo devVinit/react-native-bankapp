@@ -1,12 +1,29 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  FlatList,
+  useWindowDimensions
+} from 'react-native';
 import Constants from 'expo-constants';
 import KebabIconSvg from '../../../assets/svgs/KebabIconSvg';
 import BankCardComponent from './BankCardComponent';
 import LastTransactionComponent from './LastTransactionComponent';
 import CardComponent from '../../../components/CardComponent';
+import RBSheet from "react-native-raw-bottom-sheet";
+import SubscriptionComponent from './SubscriptionComponent';
 
 export default function HomeScreen() {
+  const refRBSheet = React.useRef<any>();
+  const { height } = useWindowDimensions();
+
+  const openSubscriptions = () => {
+    refRBSheet.current.open();
+  }
+
   return (
     <View style={styles.mainContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -24,15 +41,23 @@ export default function HomeScreen() {
               <Text style={styles.historyText}>History</Text>
               <KebabIconSvg rotation={90} />
             </View>
-
             <FlatList
               style={{ marginVertical: 20 }}
               data={[1, 2, 3, 4]}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => <CardComponent user={item} />}
+              renderItem={({ item }) => <CardComponent onPress={openSubscriptions} user={item} />}
             />
           </View>
         </View>
+        <RBSheet
+          ref={refRBSheet}
+          dragFromTopOnly={true}
+          closeOnDragDown={true}
+          closeOnPressMask={true}
+          height={height * (60 / 100)}
+        >
+          <SubscriptionComponent />
+        </RBSheet>
       </ScrollView>
     </View>
   );

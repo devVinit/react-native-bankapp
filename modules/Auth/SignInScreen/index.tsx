@@ -12,10 +12,18 @@ import {
 } from 'react-native';
 import Constants from 'expo-constants';
 import LogoSvg from '../../../assets/svgs/LogoSvg';
+import LoginLoader from '../../../components/LoginLoader';
 
 export default function SignInScreen() {
-
   const isIos = Platform.OS === "ios";
+  const [loginLoader, setLoginLoader] = React.useState<any>();
+
+  const handleLogin = (type: string) => {
+    setLoginLoader(type);
+    setTimeout(() => {
+      setLoginLoader(null);
+    }, 1000);
+  }
 
   return (
     <View style={styles.mainContainer}>
@@ -30,14 +38,18 @@ export default function SignInScreen() {
             </View>
             <Text style={styles.title}>Welcome</Text>
             <Pressable
+              onPress={() => handleLogin('facebook')}
               android_ripple={{ color: 'black', borderless: false }}
               style={({ pressed }) => [styles.actionButton, { backgroundColor: (pressed && isIos) ? '#2e50f8' : '#2E64F8' }]}>
-              <Text style={styles.actionButtonText}>Login with Facebook</Text>
+              {loginLoader !== 'facebook' && <Text style={styles.actionButtonText}>Login with Facebook</Text>}
+              {loginLoader === 'facebook' && <LoginLoader />}
             </Pressable>
             <Pressable
+              onPress={() => handleLogin('google')}
               android_ripple={{ color: 'black', borderless: false }}
               style={({ pressed }) => [styles.actionButton, { backgroundColor: (pressed && isIos) ? '#ff4b2b' : '#FF632B' }]}>
-              <Text style={styles.actionButtonText}>Login with Google</Text>
+              {loginLoader !== 'google' && <Text style={styles.actionButtonText}>Login with Google</Text>}
+              {loginLoader === 'google' && <LoginLoader />}
             </Pressable>
             <View style={styles.separatorContainer}>
               <View style={styles.separator} />
@@ -57,9 +69,11 @@ export default function SignInScreen() {
               style={styles.textInput}
             />
             <Pressable
+              onPress={() => handleLogin('email')}
               android_ripple={{ color: 'gray', borderless: false }}
               style={({ pressed }) => [styles.actionButton, { backgroundColor: (pressed && isIos) ? 'gray' : '#000618' }]}>
-              <Text style={styles.actionButtonText}>Sign in</Text>
+              {(loginLoader !== 'email') && <Text style={styles.actionButtonText}>Sign in</Text>}
+              {loginLoader === 'email' && <LoginLoader />}
             </Pressable>
           </KeyboardAvoidingView>
           <TouchableOpacity>
@@ -95,7 +109,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     width: '100%',
-    padding: 18,
+    padding: 15,
     borderRadius: 8,
     alignItems: 'center',
     marginVertical: 5,
@@ -103,6 +117,7 @@ const styles = StyleSheet.create({
   actionButtonText: {
     color: '#fff',
     fontSize: 18,
+    lineHeight: 30,
     fontFamily: 'Inter_400Regular'
   },
   separatorContainer: {
