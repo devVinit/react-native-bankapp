@@ -8,21 +8,28 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  AsyncStorage
 } from 'react-native';
 import Constants from 'expo-constants';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 import LogoSvg from '../../../assets/svgs/LogoSvg';
 import LoginLoader from '../../../components/LoginLoader';
+import { useAuth } from '../../../Contexts/AuthContext';
 
-export default function SignInScreen() {
+export default function SignInScreen({ navigation }) {
   const isIos = Platform.OS === "ios";
-  const [loginLoader, setLoginLoader] = React.useState<any>();
+  const [loginLoader, setLoginLoader] = React.useState<string | null>();
+
+  const [_, setLoggedIn] = useAuth();
 
   const handleLogin = (type: string) => {
     setLoginLoader(type);
     setTimeout(() => {
-      setLoginLoader(null);
+      setLoggedIn();
     }, 1000);
+    AsyncStorage.setItem('token', 'SignUpToken');
   }
 
   return (
@@ -56,25 +63,53 @@ export default function SignInScreen() {
               <Text style={styles.separatorText}>or</Text>
               <View style={styles.separator} />
             </View>
-            <TextInput
-              value={''}
-              placeholder="Email"
-              onChangeText={(text) => console.log(text)}
-              style={styles.textInput}
-            />
-            <TextInput
-              value={''}
-              placeholder="Password"
-              onChangeText={(text) => console.log(text)}
-              style={styles.textInput}
-            />
-            <Pressable
-              onPress={() => handleLogin('email')}
-              android_ripple={{ color: 'gray', borderless: false }}
-              style={({ pressed }) => [styles.actionButton, { backgroundColor: (pressed && isIos) ? 'gray' : '#000618' }]}>
-              {(loginLoader !== 'email') && <Text style={styles.actionButtonText}>Sign in</Text>}
-              {loginLoader === 'email' && <LoginLoader />}
-            </Pressable>
+            <Formik
+              enableReinitialize
+              initialTouched={{
+                email: false,
+                password: false,
+              }}
+              initialValues={{
+                email: '',
+                password: '',
+              }}
+              validationSchema={yup.object().shape({
+                email: yup.string().matches(/[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}/).required(),
+                password: yup.string().required(),
+              })}
+              onSubmit={(values) => handleLogin('email')}
+            >
+              {
+                ({ values, errors, touched, isSubmitting, handleChange, handleSubmit }: any) =>
+                (
+                  <>
+                    <TextInput
+                      value={values.email}
+                      onChangeText={handleChange('email')}
+                      placeholder="Email"
+                      style={styles.textInput}
+                    />
+                    {touched && touched.email && errors && errors.email && <Text style={styles.textErrorText}>Invalid Email Address</Text>}
+                    <TextInput
+                      secureTextEntry={true}
+                      value={values.password}
+                      placeholder="Password"
+                      onChangeText={handleChange('password')}
+                      style={styles.textInput}
+                    />
+                    {touched && touched.password && touched && errors && errors.password && <Text style={styles.textErrorText}>Password is Required</Text>}
+                    <Pressable
+                      // disabled={isSubmitting}
+                      onPress={handleSubmit}
+                      android_ripple={{ color: 'gray', borderless: false }}
+                      style={({ pressed }) => [styles.actionButton, { backgroundColor: (pressed && isIos) ? 'gray' : '#000618' }]}>
+                      {(loginLoader !== 'email') && <Text style={styles.actionButtonText}>Sign in</Text>}
+                      {loginLoader === 'email' && <LoginLoader />}
+                    </Pressable>
+                  </>
+                )
+              }
+            </Formik>
           </KeyboardAvoidingView>
           <TouchableOpacity>
             <Text style={[styles.actionButtonText, { color: '#000', marginVertical: '20%' }]}>Sign Up!</Text>
@@ -146,5 +181,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Inter_400Regular',
     marginVertical: 5,
+  },
+  textErrorText: {
+    color: '#FF632B',
+    fontSize: 14,
+    fontFamily: 'Inter_400Regular',
+    textAlign: 'left',
   }
 });

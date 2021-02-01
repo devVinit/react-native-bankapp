@@ -15,10 +15,13 @@ import LastTransactionComponent from './LastTransactionComponent';
 import CardComponent from '../../../components/CardComponent';
 import RBSheet from "react-native-raw-bottom-sheet";
 import SubscriptionComponent from './SubscriptionComponent';
+import { useAuth } from '../../../Contexts/AuthContext';
 
 export default function HomeScreen() {
   const refRBSheet = React.useRef<any>();
   const { height } = useWindowDimensions();
+
+  const [_, setLoggedIn] = useAuth();
 
   const openSubscriptions = () => {
     refRBSheet.current.open();
@@ -30,7 +33,7 @@ export default function HomeScreen() {
         <View style={styles.container}>
           <View style={styles.headerContainer}>
             <Text style={styles.title}>Hey Andy!</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={setLoggedIn}>
               <KebabIconSvg />
             </TouchableOpacity>
           </View>
@@ -45,7 +48,7 @@ export default function HomeScreen() {
               style={{ marginVertical: 20 }}
               data={[1, 2, 3, 4]}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => <CardComponent onPress={openSubscriptions} user={item} />}
+              renderItem={({ item }) => <CardComponent onPress={openSubscriptions} />}
             />
           </View>
         </View>

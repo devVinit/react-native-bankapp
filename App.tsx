@@ -7,6 +7,7 @@ import { useFonts, Inter_500Medium, Inter_600SemiBold, Inter_400Regular } from '
 
 import useCachedResources from './hooks/useCachedResources';
 import { AppNavigator } from './modules/AppNavigator';
+import { AuthProvider } from './Contexts/AuthContext';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -22,10 +23,12 @@ export default function App() {
     return (
       <SafeAreaProvider>
         <NavigationContainer>
-          <AppNavigator />
+          <AuthProvider>
+            <AppNavigator />
+          </AuthProvider>
         </NavigationContainer>
         <StatusBar backgroundColor="#fff" />
-      </SafeAreaProvider>
+      </SafeAreaProvider >
     );
   }
 }
