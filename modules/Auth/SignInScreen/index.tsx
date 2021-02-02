@@ -18,7 +18,11 @@ import LogoSvg from '../../../assets/svgs/LogoSvg';
 import LoginLoader from '../../../components/LoginLoader';
 import { useAuth } from '../../../Contexts/AuthContext';
 
-export default function SignInScreen({ navigation }) {
+interface SignUpScreenProps {
+  navigation: any;
+}
+
+export default function SignInScreen({ navigation }: SignUpScreenProps) {
   const isIos = Platform.OS === "ios";
   const [loginLoader, setLoginLoader] = React.useState<string | null>();
 
@@ -111,7 +115,7 @@ export default function SignInScreen({ navigation }) {
               }
             </Formik>
           </KeyboardAvoidingView>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUpScreen')}>
             <Text style={[styles.actionButtonText, { color: '#000', marginVertical: '20%' }]}>Sign Up!</Text>
           </TouchableOpacity>
         </View>

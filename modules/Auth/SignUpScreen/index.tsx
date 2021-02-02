@@ -16,7 +16,11 @@ import * as yup from 'yup';
 import LogoSvg from '../../../assets/svgs/LogoSvg';
 import LoginLoader from '../../../components/LoginLoader';
 
-export default function SignInScreen() {
+interface SignInScreenProps {
+  navigation: any;
+}
+
+export default function SignInScreen({ navigation }: SignInScreenProps) {
   const isIos = Platform.OS === "ios";
   const [loginLoader, setLoginLoader] = React.useState<string | null>();
 
@@ -96,26 +100,8 @@ export default function SignInScreen() {
                 )
               }
             </Formik>
-
-            <TextInput
-              value={''}
-              placeholder="Email"
-              onChangeText={(text) => console.log(text)}
-              style={styles.textInput}
-            />
-            <TextInput
-              value={''}
-              placeholder="Password"
-              onChangeText={(text) => console.log(text)}
-              style={styles.textInput}
-            />
-            <Pressable
-              android_ripple={{ color: 'gray', borderless: false }}
-              style={({ pressed }) => [styles.actionButton, { backgroundColor: (pressed && isIos) ? 'gray' : '#000618' }]}>
-              <Text style={styles.actionButtonText}>Sign Up!</Text>
-            </Pressable>
           </KeyboardAvoidingView>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
             <Text style={[styles.actionButtonText, { color: '#000', marginVertical: '20%' }]}>Sign In</Text>
           </TouchableOpacity>
         </View>
