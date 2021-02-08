@@ -19,6 +19,38 @@ interface SubscriptionComponentProps {
 };
 
 const SubscriptionComponent = ({ show, onClose }: SubscriptionComponentProps) => {
+
+  const subscriptionData = [
+    {
+      avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+      amount: '- $ 72.00',
+      timeStamp: '1:29 am',
+      person: 'To Joel',
+      transactionType: 'Transfer Money'
+    },
+    {
+      avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
+      amount: '- $ 14.00',
+      timeStamp: '5:32 pm',
+      person: 'From Amanda',
+      transactionType: 'Transfer Money'
+    },
+    {
+      avatar: 'https://randomuser.me/api/portraits/men/97.jpg',
+      amount: '+ $ 128.00',
+      timeStamp: '4:45 am',
+      person: 'From Simon',
+      transactionType: 'Income Money'
+    },
+    {
+      avatar: 'https://randomuser.me/api/portraits/men/93.jpg',
+      amount: '+ $ 300.00',
+      timeStamp: '9:45 pm',
+      person: 'From Andrew',
+      transactionType: 'Income Money'
+    },
+  ];
+
   const { height } = useWindowDimensions();
 
   const overlayFade = React.useRef(new Animated.Value(0));
@@ -66,6 +98,7 @@ const SubscriptionComponent = ({ show, onClose }: SubscriptionComponentProps) =>
       <Animated.View style={[styles.backgroundContainer, { opacity: overlayFade.current }]} />
       <Pressable onPress={beforeClose} style={{ height: height * (30 / 100) }} />
       <Animated.View style={{
+        height: height * (70 / 100),
         transform: [
           {
             translateY: translateY.current
@@ -98,9 +131,9 @@ const SubscriptionComponent = ({ show, onClose }: SubscriptionComponentProps) =>
 
               <FlatList
                 style={{ marginBottom: 20 }}
-                data={[1, 2, 3, 4]}
+                data={subscriptionData}
                 keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => <CardComponent user={item} />}
+                renderItem={({ item }) => <CardComponent data={item} />}
               />
             </View>
           </View>
