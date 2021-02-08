@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 
 interface CardComponentProps {
-  onPress: () => void
 }
 
-const CardComponent = React.memo(({ onPress }: CardComponentProps) => {
-  return <Pressable style={styles.container} onPress={onPress}>
+const CardComponent = React.memo((props: CardComponentProps) => {
+  return <View style={styles.container}>
     <Image style={styles.avatarImage} source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }} />
     <View style={{ flex: 1, }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -18,7 +17,7 @@ const CardComponent = React.memo(({ onPress }: CardComponentProps) => {
         <Text style={styles.subtitleText}>1:29 pm</Text>
       </View>
     </View>
-  </Pressable>
+  </View>
 });
 
 export default CardComponent;

@@ -1,9 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Pressable } from 'react-native';
 import VesselIconSvg from '../../../assets/svgs/VesselIconSvg';
 
-const LastTransactionComponent = React.memo(() => {
-  return <View style={styles.lastTransactionContainer}>
+interface LastTransactionComponentProps {
+  onPress: () => void;
+}
+
+const LastTransactionComponent = React.memo(({ onPress }: LastTransactionComponentProps) => {
+  return <Pressable style={styles.lastTransactionContainer} onPress={onPress}>
     <View style={styles.iconContainer}>
       <VesselIconSvg />
     </View>
@@ -14,7 +18,7 @@ const LastTransactionComponent = React.memo(() => {
         <Text style={styles.availableAmountText}>Available $ 4.500.00</Text>
       </View>
     </View>
-  </View>;
+  </Pressable>;
 });
 
 export default LastTransactionComponent;

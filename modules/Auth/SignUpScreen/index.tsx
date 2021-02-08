@@ -13,8 +13,10 @@ import {
 import Constants from 'expo-constants';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { Feather } from '@expo/vector-icons';
 import LogoSvg from '../../../assets/svgs/LogoSvg';
 import LoginLoader from '../../../components/LoginLoader';
+import CustomTextInput from '../../../components/CustomTextInput';
 
 interface SignInScreenProps {
   navigation: any;
@@ -56,9 +58,9 @@ export default function SignInScreen({ navigation }: SignInScreenProps) {
                 userName: '',
               }}
               validationSchema={yup.object().shape({
-                email: yup.string().matches(/[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}/).required(),
-                password: yup.string().required(),
-                userName: yup.string().required(),
+                email: yup.string().matches(/[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}/, 'Invalid email address').required('email address is required'),
+                password: yup.string().required('password is required'),
+                userName: yup.string().required('username is required'),
               })}
               onSubmit={(values) => handleSignUp()}
             >
@@ -66,28 +68,28 @@ export default function SignInScreen({ navigation }: SignInScreenProps) {
                 ({ values, errors, touched, isSubmitting, handleChange, handleSubmit }: any) =>
                 (
                   <>
-                    <TextInput
+                    <CustomTextInput
                       value={values.userName}
                       placeholder="Name"
                       onChangeText={handleChange('userName')}
                       style={styles.textInput}
+                      validation={touched && touched.userName && errors && errors.userName}
                     />
-                    {touched && touched.email && errors && errors.email && <Text style={styles.textErrorText}>Name is required</Text>}
-                    <TextInput
+                    <CustomTextInput
                       value={values.email}
                       onChangeText={handleChange('email')}
                       placeholder="Email"
                       style={styles.textInput}
+                      validation={touched && touched.email && errors && errors.email}
                     />
-                    {touched && touched.email && errors && errors.email && <Text style={styles.textErrorText}>Invalid Email Address</Text>}
-                    <TextInput
+                    <CustomTextInput
                       secureTextEntry={true}
                       value={values.password}
                       placeholder="Password"
                       onChangeText={handleChange('password')}
                       style={styles.textInput}
+                      validation={touched && touched.password && touched && errors && errors.password}
                     />
-                    {touched && touched.password && touched && errors && errors.password && <Text style={styles.textErrorText}>Password is Required</Text>}
                     <Pressable
                       disabled={isSubmitting}
                       onPress={handleSubmit}
@@ -106,7 +108,12 @@ export default function SignInScreen({ navigation }: SignInScreenProps) {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </View>
+      <View style={{ position: 'absolute', top: 0, left: 0 }}>
+        <TouchableOpacity style={{ padding: 20 }} onPress={() => navigation.navigate('SignInScreen')}>
+          <Feather name="arrow-left" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+    </View >
   );
 }
 
@@ -120,7 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     alignItems: 'center',
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
   },
   logoContainer: {
     marginBottom: '7%',
